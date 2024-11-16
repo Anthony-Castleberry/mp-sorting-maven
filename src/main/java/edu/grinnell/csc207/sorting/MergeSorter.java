@@ -1,6 +1,7 @@
 package edu.grinnell.csc207.sorting;
 
 import java.util.Comparator;
+import edu.grinnell.csc207.util.ArrayUtils;
 
 /**
  * Something that sorts using merge sort.
@@ -21,6 +22,15 @@ public class MergeSorter<T> implements Sorter<T> {
    */
   Comparator<? super T> order;
 
+  /**
+   * Helper array to store sorted items
+   */
+  T[] helper;
+
+  int count = 0;
+  int Lcount = 0;
+  int Peas = 0;
+  
   // +--------------+------------------------------------------------
   // | Constructors |
   // +--------------+
@@ -55,6 +65,55 @@ public class MergeSorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+  helper = values.clone();
+  if(values.length > 1) {
+     sortHelper(values, 0, values.length);
+  }
+  values = helper;
   } // sort(T[])
+
+  public void merge(T[] values, int lb, int mb, int ub) {
+
+
+    int i = lb;
+    int j = mb;
+    int track = lb;
+    while(j < ub) {
+      T rightVal = values[j];
+      T leftVal = values[i];
+
+      if (i < mb) {
+       if (this.order.compare(leftVal, rightVal) > 0) {
+          helper[track] = rightVal;
+          j++;
+          track++;
+        } else {
+          helper[track] = leftVal;
+          i++;
+          track++;
+        }
+      } else {
+        helper[track] = rightVal;
+        j++;
+        track++;
+      }
+    } // while
+  } // merge
+
+  // +---------+-----------------------------------------------------
+  // | Helpers |
+  // +---------+
+
+  public void sortHelper(T[] values, int lb, int ub) {
+    if(ub - lb == 2) {
+      if (this.order.compare(values[lb], values[ub - 1]) > 0) {
+        ArrayUtils.swap(values, lb, (ub - 1)); 
+      }
+    } else if (ub - lb > 2) {
+      sortHelper(values, lb, (lb + ub) / 2);
+      sortHelper(values, (lb + ub) / 2, ub);
+      merge(values, lb, (lb + ub) / 2, ub);
+    }
+  }
+
 } // class MergeSorter

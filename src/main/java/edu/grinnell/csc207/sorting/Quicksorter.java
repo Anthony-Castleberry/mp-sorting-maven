@@ -1,6 +1,8 @@
 package edu.grinnell.csc207.sorting;
 
+import edu.grinnell.csc207.util.ArrayUtils;
 import java.util.Comparator;
+import java.util.Random;
 
 /**
  * Something that sorts using Quicksort.
@@ -20,6 +22,8 @@ public class Quicksorter<T> implements Sorter<T> {
    * The way in which elements are ordered.
    */
   Comparator<? super T> order;
+
+  int initPivot;
 
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -55,6 +59,77 @@ public class Quicksorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+    if (values.length > 1) {
+      Random Pivot = new Random();
+      int pivotOne = Pivot.nextInt(values.length - 2);
+      int pivotTwo = Pivot.nextInt(values.length - 2);
+      int pivotThree = Pivot.nextInt(values.length - 2);
+      int pivotNum = findMedian(pivotOne, pivotTwo, pivotThree);
+      int[] Flag = this.dnf(values, pivotNum, 0, values.length);
+      sortHelper(values, Flag[0], Flag[1], 0, values.length);
+
+    } // if
   } // sort(T[])
+
+
+
+  public void sortHelper(T[] values, int r, int b, int lb, int ub) {
+    if (r > 1 && ub - r > 1) {
+      int rPivotOne = (new Random()).nextInt(ub - (ub - r));
+      int rPivotTwo = (new Random()).nextInt(ub - (ub - r));
+      int rPivotThree = (new Random()).nextInt(ub - (ub - r));
+      int rPivot = findMedian(rPivotOne, rPivotTwo, rPivotThree);
+      int[] rFlag = dnf(values, rPivot, lb, r);
+      sortHelper(values, rFlag[0], rFlag[1], lb, r);
+    } // if
+
+    if (ub - b > 1 && b > 2) {
+      int bPivotOne = (new Random()).nextInt(ub - b) + b;
+      int bPivotTwo = (new Random()).nextInt(ub - b) + b;
+      int bPivotThree = (new Random()).nextInt(ub - b) + b;
+      int bPivot = findMedian(bPivotOne, bPivotTwo, bPivotThree);
+      int[] bFlag = dnf(values, bPivot, b, values.length);
+      sortHelper(values, bFlag[0], bFlag[1], b, values.length);
+    }
+  }
+
+  /**
+   * partitions the array into 3 seperate areas
+   * 
+   * @param values
+   * array to be partitioned
+   */
+  private int[] dnf(T[] values, int pivot, int lb, int ub) {
+    int r = lb;
+    int w = lb;
+    int b = ub;
+    int count = 0;
+    while(b != w) {
+      count++;
+      if (this.order.compare(values[w], values[pivot]) > 0) {
+        ArrayUtils.swap(values, w, b - 1);
+        b--;
+      } else if (this.order.compare(values[w], values[pivot]) < 0) {
+        ArrayUtils.swap(values, w, r);
+        r++;
+        w++;
+      } else if (this.order.compare(values[w], values[pivot]) == 0) {
+        w++;
+      } 
+    }
+    return new int[] {r, b};
+  } // dnf
+
+  private int findMedian (int x, int y, int z) {
+    if ((x >= y && x <= z) || (x <= y && x >= z)) {
+      return x;
+    } else if ((y >= x && y <= z) || (y <= x && y >= z)) {
+      return y;
+    } if (((z >= y && z <= x) || (z <= y && z >= x))) {
+      return z;
+    } else {
+      return x;
+    }
+
+  }
 } // class Quicksorter

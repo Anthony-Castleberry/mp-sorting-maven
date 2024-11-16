@@ -55,6 +55,99 @@ public class InsertionSorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+    int p = 1;
+    /* 
+      |-----------------|--------------------|
+      |     sorted      |      unsorted      |
+      |-----------------|--------------------|
+                        p
+    */
+    for (int i = 1; i < values.length; i++) {
+    /* 
+      |-----------------|--------------------|
+      |     sorted (p-1)| ?    unsorted      |
+      |-----------------|--------------------|
+                        p
+    */
+    // if ? is smaller than the last value in sorted
+    if (this.order.compare(values[i], values[p - 1]) < 0) {
+      for (int j = 0; j < p; j++) {
+        // when ? is smaller than the current value being checked in sorted
+        if (this.order.compare(values[i], values[j]) < 0) {
+          insert(values, j, p, values[p]);
+            /* 
+              |--------------------|-----------------|
+              |   X<?   ?   X>?    |   unsorted      |
+              |--------------------|-----------------|
+                                   p                               
+            */
+        // when ? is equal to the current value being checked in sorted, ensures stability
+        } else if (this.order.compare(values[i], values[j]) == 0) {
+          insert(values, j + 1, p, values[p]);
+            /* 
+              |--------------------|-----------------|
+              |   X<?   ?   X>?    |   unsorted      |
+              |--------------------|-----------------|
+                                   p                               
+            */
+        } 
+      }
+    }
+      p++;
+    } // for
   } // sort(T[])
+
+  /**
+   * shifts all elements one to the right from lb to ub by one
+   * replacing the newly opened lb with val,
+   * overrides the element at index ub.
+   * 
+   * @param array array where lements will be shifted in-place
+   * @param lb beggining of elements to be shifted(inclusive)
+   * @param ub end of elements to be shifted (exclusive); will be overwritten
+   * @param val value to replace lb
+   */
+  private void insert(T[] array, int lb, int ub, T val) {
+    /* 
+      |---|---|---|---|---|---|
+      | 0 | 1 | 2 | 3 | 4 | 5 |
+      |---|---|---|---|---|---|
+      lb              i   ub      
+    */
+    for (int i = ub - 1; i >= lb; i--) {
+      array[i + 1] = array[i];
+    /* 
+      |---|---|---|---|---|---|
+      | 0 | 1 | 2 | 3 | 4 | 4 |
+      |---|---|---|---|---|---|
+      lb              i   ub(i + 1)      
+    */
+
+    /* 
+    after loop updates i
+      |---|---|---|---|---|---|
+      | 0 | 1 | 2 | 3 | 4 | 4 |
+      |---|---|---|---|---|---|
+      lb          i  i+1  ub      
+    */
+  } // for
+
+    /* 
+    after loop terminates
+      |---|---|---|---|---|---|
+      | 0 | 0 | 1 | 2 | 3 | 4 |
+      |---|---|---|---|---|---|
+      lb                  ub      
+    */
+
+    array[lb] = val;
+
+    /* 
+      |---|---|---|---|---|---|
+      |val| 0 | 1 | 2 | 3 | 4 |
+      |---|---|---|---|---|---|
+      lb                  ub      
+    */
+  }
+
 } // class InsertionSorter
