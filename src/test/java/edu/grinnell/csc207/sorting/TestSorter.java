@@ -1,7 +1,7 @@
 package edu.grinnell.csc207.sorting;
 
 import edu.grinnell.csc207.util.ArrayUtils;
-
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -120,4 +120,94 @@ public class TestSorter {
     ArrayUtils.permute(original);
     assertSorts(expected, original, intSorter);
   } // permutedIntegers
+
+  /**
+   * Can the sorter handle when only 2 elements are out of order.
+   */
+  @Test
+  public void twoOffIntegerTest() {
+    int SIZE = 10; 
+    if (null == intSorter) { 
+      return; 
+    } // if
+    Integer[] original = new Integer[SIZE];
+    for (int i = 0; i < SIZE; i++) {
+      original[i] = i;
+    } // for
+    for(int i = 0; i < SIZE; i++) {
+      original[i] = i;
+    } // for
+    Integer[] expected = original.clone();
+    for(int j = 1; j < SIZE; j++) {
+      for(int k = 0; k < j; k++) {
+        int lb = original[k];
+        int ub = original[j];
+        original[k] = ub;
+        original[j] = lb;
+        assertSorts(expected, original, intSorter);
+        original[k] = lb;
+        original[j] = ub;
+      } // for
+    } // for
+  } // twoOffIntegerTest 
+
+  /**
+   * Can the sorter handle multiple elements that are equal to eachother
+   * test does not care about stability.
+   */
+  @Test
+  public void multipleEqualElementsTest() {
+    if (null == stringSorter) {
+      return;
+    } // if
+    String[] original = {"a", "b", "c", "b", "d"};
+    String[] expected = {"a", "b", "b", "c", "d"};
+    assertSorts(expected, original, stringSorter);
+  } // multipleEqualElementsTest
+
+  /**
+   * Can the sorter handle multiple elements that are equal to eachother
+   * when the array is already sorted
+   * test does not care about stability.
+   */
+  @Test
+  public void multipleEqualElementSortedTest() {
+    if (null == stringSorter) {
+      return;
+    } // if
+    String[] original = {"a", "b", "b", "c", "d"};
+    String[] expected = {"a", "b", "b", "c", "d"};
+    assertSorts(expected, original, stringSorter);
+  } // multipleEqualElementSortedTest
+
+  /**
+   * Can the sorter handle an array of length one.
+   */
+  @Test
+  public void oneLengthSorter() {
+    if (null == intSorter) {
+      return;
+    } // if
+    int SIZE = 1;
+    Integer[] original = new Integer[SIZE];
+    Integer[] expected = original.clone();
+    assertSorts(expected, original, intSorter);
+  } // oneLengthSorter
+
+  /**
+   * Can the sorter Handle an array of length 0
+   */
+    /**
+   * Can the sorter handle an array of length one.
+   */
+  @Test
+  public void zeroLengthSorter() {
+    if (null == intSorter) {
+      return;
+    } // if
+    int SIZE = 0;
+    Integer[] original = new Integer[SIZE];
+    Integer[] expected = original.clone();
+    assertSorts(expected, original, intSorter);
+  } // oneLengthSorter
 } // class TestSorter

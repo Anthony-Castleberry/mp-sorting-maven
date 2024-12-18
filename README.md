@@ -9,12 +9,12 @@ Authors
 
 Acknowledgements
 
-* _Forthcoming_.
-
 This code may be found at <https://github.com/Anthony-Castleberry/mp-sorting-maven>. The original code may be found at <https://github.com/Grinnell-CSC207/mp-sorting-maven>.
 
 Description of custom sorting algorithm
 ---------------------------------------
+
+performs insertion sort if array is mostly sorted, else performs selection sort
 
 Notes on using Copilot (or other AI)
 ------------------------------------

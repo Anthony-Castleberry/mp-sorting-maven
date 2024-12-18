@@ -11,6 +11,7 @@ import java.util.Random;
  *   The types of values that are sorted.
  *
  * @author Samuel A. Rebelsky
+ * @author Anthony Castleberry
  */
 
 public class Quicksorter<T> implements Sorter<T> {

@@ -1,18 +1,19 @@
 package edu.grinnell.csc207.sorting;
 
 import java.util.Comparator;
+import edu.grinnell.csc207.util.ArrayUtils;
+
 
 /**
- * Something that sorts using insertion sort.
+ * My custom sort
  *
  * @param <T>
  *   The types of values that are sorted.
  *
- * @author Samuel A. Rebelsky
  * @author Anthony Castleberry
  */
 
-public class InsertionSorter<T> implements Sorter<T> {
+public class CastleberryAnthonySorter<T> implements Sorter<T> {
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
@@ -33,11 +34,11 @@ public class InsertionSorter<T> implements Sorter<T> {
    *   The order in which elements in the array should be ordered
    *   after sorting.
    */
-  public InsertionSorter(Comparator<? super T> comparator) {
+  public CastleberryAnthonySorter(Comparator<? super T> comparator) {
     this.order = comparator;
   } // InsertionSorter(Comparator)
 
-  // +---------+-----------------------------------------------------
+  // +---------+------------------------------------------------------
   // | Methods |
   // +---------+
 
@@ -46,16 +47,38 @@ public class InsertionSorter<T> implements Sorter<T> {
    *
    * @param values
    *   an array to sort.
-   *
-   * @post
-   *   The array has been sorted according to some order (often
-   *   one given to the constructor).
-   * @post
-   *   For all i, 0 &lt; i &lt; values.length,
-   *     order.compare(values[i-1], values[i]) &lt;= 0
    */
   @Override
   public void sort(T[] values) {
+
+    if (values.length == 0){
+      return;
+    } else if(isSorted(values)) {
+      insertionSort(values);
+    } else {
+      selectionSort(values);
+    }
+  
+  }
+
+  // +---------+-------------------------------------------------------
+  // | Helpers |
+  // +---------+
+
+
+  public boolean isSorted(T[] values)  {
+    int sortPercentage = 0;
+
+    for (int i = 0; i < values.length - 1; i++) {
+      if (this.order.compare(values[i], values[i + 1]) < 0) {
+        sortPercentage++;
+      }
+    }
+
+    return (sortPercentage / values.length) > .7;
+  }
+
+  public void insertionSort(T[] values) {
     int p = 1;
     /* 
       |-----------------|--------------------|
@@ -151,4 +174,35 @@ public class InsertionSorter<T> implements Sorter<T> {
     */
   }
 
-} // class InsertionSorter
+   /**
+   * Sort an array in place using selection sort.
+   *
+   * @param values
+   *   an array to sort.
+   *
+   * @post
+   *   The array has been sorted according to some order (often
+   *   one given to the constructor).
+   * @post
+   *   For all i, 0 &lt; i &lt; values.length,
+   *     order.compare(values[i-1], values[i]) &lt;= 0
+   */
+  public void selectionSort(T[] values) {
+    for (int i = 0; i < values.length; i++) {
+      int smallest = select(values, i);
+      T temp = values[i];
+      values[i] = values[smallest];
+      values[smallest] = temp; 
+    }
+  } // sort(T[])
+
+  public int select(T[] array, int lb) {
+    int minIndex = lb;
+    for (int i = lb + 1; i < array.length; i++) {
+      if (this.order.compare(array[minIndex], array[i]) > 0) {
+        minIndex = i;
+      }
+    }
+    return minIndex;
+  }
+}

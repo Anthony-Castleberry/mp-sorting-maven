@@ -10,6 +10,7 @@ import edu.grinnell.csc207.util.ArrayUtils;
  *   The types of values that are sorted.
  *
  * @author Samuel A. Rebelsky
+ * @author Anthony Castleberry
  */
 
 public class MergeSorter<T> implements Sorter<T> {
