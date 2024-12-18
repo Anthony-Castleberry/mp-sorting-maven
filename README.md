@@ -9,6 +9,8 @@ Authors
 
 Acknowledgements
 
+No Acknowledgements for this project
+
 This code may be found at <https://github.com/Anthony-Castleberry/mp-sorting-maven>. The original code may be found at <https://github.com/Grinnell-CSC207/mp-sorting-maven>.
 
 Description of custom sorting algorithm
